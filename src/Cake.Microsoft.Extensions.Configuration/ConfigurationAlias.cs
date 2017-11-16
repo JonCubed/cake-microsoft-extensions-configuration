@@ -4,6 +4,7 @@ using System.Linq;
 using Cake.Core;
 using Cake.Core.Annotations;
 using Microsoft.Extensions.Configuration;
+using System.Runtime.CompilerServices;
 
 namespace Cake.Microsoft.Extensions.Configuration
 {
@@ -52,18 +53,18 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <returns>Return configuration of <typeparamref name="T"/></returns>
         /// <example>
         /// <code>
-        ///     var defaults = new Dictionary() 
+        ///     var defaults = new Dictionary()
         ///     {
         ///         ["environment"] = "local",
         ///         ["concurrency"] = "10"
-        ///     };     
-        /// 
-        ///     var switchMappings = new Dictionary() 
+        ///     };
+        ///
+        ///     var switchMappings = new Dictionary()
         ///     {
         ///         ["-e"] = "--environment",
         ///         ["-c"] = "--concurrency"
         ///     };
-        ///     
+        ///
         ///     var settings = GetConfiguration<MyScriptSettings>(defaults, switchMappings);
         /// </code>
         /// </example>
@@ -90,24 +91,24 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <param name="commandLineSwitchMappings">Dictionary of command line arguments to replace if present</param>
         /// <example>
         /// <code>
-        ///     var defaults = new Dictionary() 
+        ///     var defaults = new Dictionary()
         ///     {
         ///         ["environment"] = "local",
         ///         ["concurrency"] = "10"
-        ///     };     
-        /// 
-        ///     var switchMappings = new Dictionary() 
+        ///     };
+        ///
+        ///     var switchMappings = new Dictionary()
         ///     {
         ///         ["-e"] = "--environment",
         ///         ["-c"] = "--concurrency"
         ///     };
-        ///     
-        ///     var settings = new MySettings 
+        ///
+        ///     var settings = new MySettings
         ///     {
         ///         Environment = "Unknown",
         ///         Concurrency = "1"
         ///     }
-        ///     
+        ///
         ///     GetConfiguration(settings, defaults, switchMappings);
         /// </code>
         /// </example>
@@ -152,12 +153,12 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <param name="initialiseAction">Action to setup configuration builder</param>
         /// <example>
         /// <code>
-        ///     var settings = new MySettings 
+        ///     var settings = new MySettings
         ///     {
         ///         Environment = "Unknown",
         ///         Concurrency = "1"
         ///     }
-        ///     
+        ///
         ///     GetConfiguration(settings, (builder, args) => {
         ///         builder
         ///             .AddEnvironmentVariables()
@@ -186,7 +187,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         ///             .AddEnvironmentVariables()
         ///             .AddCommandLine(args)
         ///     });
-        ///     
+        ///
         ///     var settings = BindConfiguration<MyScriptSettings>();
         /// </code>
         /// </example>
@@ -211,13 +212,13 @@ namespace Cake.Microsoft.Extensions.Configuration
         ///             .AddEnvironmentVariables()
         ///             .AddCommandLine(args)
         ///     });
-        ///     
-        ///     var settings = new MySettings 
+        ///
+        ///     var settings = new MySettings
         ///     {
         ///         Environment = "Unknown",
         ///         Concurrency = "1"
         ///     }
-        ///     
+        ///
         ///     BindConfiguration(settings);
         /// </code>
         /// </example>
@@ -288,5 +289,13 @@ namespace Cake.Microsoft.Extensions.Configuration
                 ;
             };
         }
+    }
+
+    /// <summary>
+    /// This namespace contains Microsoft.Extensions.Configure aliases and related members.
+    /// </summary>
+    [CompilerGenerated]
+    internal class NamespaceDoc
+    {
     }
 }

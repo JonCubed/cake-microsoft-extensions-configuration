@@ -4,13 +4,23 @@
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>Cake.Microsoft.Extensions.Configuration</PackageId>
+    <Title>Cake.Microsoft.Extensions.Configuration</Title>
+    <Description></Description>
+    <Authors>jonathankuleff</Authors>
+    <Owners>jonathankuleff</Owners>
+    <PackageTags>Cake;Build;Addin;Configuration</PackageTags>
+    <RepositoryUrl>https://github.com/JonCubed/cake-microsoft-extensions-configuration</RepositoryUrl>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Cake.Core" Version="0.23.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="1.1.2" />
-    
+
     <PackageReference Include="System.ValueTuple" Version="4.3.1" />
   </ItemGroup>
 </Project>
