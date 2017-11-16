@@ -247,7 +247,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         [CakeMethodAlias]
         public static void LoadConfiguration(this ICakeContext context, Action<IConfigurationBuilder, string[]> initialiseAction)
         {
-            var builder = new ConfigurationBuilder();
+            var args = Environment.GetCommandLineArgs().Skip(1).ToList();
 
             var (cakeArgs, scriptArgs, invalidArgs) = CommandLineHelper.ParseCommandLineArgs();
 
@@ -255,6 +255,8 @@ namespace Cake.Microsoft.Extensions.Configuration
             {
                 Console.WriteLine($"{arg} is not in the correct format for Microsoft.Extensions.Configuration.CommandLine and has been ignored.");
             }
+
+            var builder = new ConfigurationBuilder();
 
             initialiseAction?.Invoke(builder, scriptArgs.ToArray());
 

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.Microsoft.Extensions.Configuration", "src\Cake.Microsoft.Extensions.Configuration\Cake.Microsoft.Extensions.Configuration.csproj", "{0BA50939-47AD-4FCF-9D73-10425E973D43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.Microsoft.Extensions.Configuration.Tests", "test\Cake.Microsoft.Extensions.Configuration.Tests\Cake.Microsoft.Extensions.Configuration.Tests.csproj", "{6A2C2BDE-9BA2-4F42-B869-F651D6B53605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0BA50939-47AD-4FCF-9D73-10425E973D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BA50939-47AD-4FCF-9D73-10425E973D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BA50939-47AD-4FCF-9D73-10425E973D43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A2C2BDE-9BA2-4F42-B869-F651D6B53605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A2C2BDE-9BA2-4F42-B869-F651D6B53605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A2C2BDE-9BA2-4F42-B869-F651D6B53605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A2C2BDE-9BA2-4F42-B869-F651D6B53605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

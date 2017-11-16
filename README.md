@@ -1,6 +1,11 @@
 # Cake.Microsoft.Extensions.Configuration
-[![NuGet](https://img.shields.io/nuget/v/Cake.Microsoft.Extensions.Configuration.svg)](https://www.nuget.org/packages/Cake.Microsoft.Extensions.Configuration/)
+
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://cake-contrib.mit-license.org)
+
+[![NuGet](https://img.shields.io/nuget/v/Cake.Microsoft.Extensions.Configuration.svg)](https://www.nuget.org/packages/Cake.Microsoft.Extensions.Configuration/)
+
+[![Cake](https://img.shields.io/badge/Cake-0.23.0-green.svg)](http://cakebuild.net/)
+![.NET Standard](https://img.shields.io/badge/.NET_Standard-1.6-green.svg)
 
 Cake.Microsoft.Extensions.Configuration is an Addin that extends [Cake](http://cakebuild.net/) for creating strongly typed configuration using [Microsoft.Extensions.Configuration](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration?tabs=basicconfiguration).
 
@@ -9,13 +14,6 @@ You can write your own `ConfigurationProvider` or use any of the configuration p
 ## General Notes
 
 *__This is currently in alpha stage of development, feedback and contribution welcomed__*
-
-Cake.Microsoft.Extensions.Configuration targets the following:
-
-|||
-|----|----|
-|Cake|0.23.0|
-|.NET Standard|1.6|
 
 ## Installation
 

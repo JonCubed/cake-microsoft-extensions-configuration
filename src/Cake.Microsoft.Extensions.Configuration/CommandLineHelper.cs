@@ -13,7 +13,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <summary>
         /// List of Cake long name command line arguments
         /// </summary>
-        public static ICollection<string> KnownCakeCommandLineArguments = new[]
+        public readonly static ICollection<string> KnownCakeCommandLineArguments = new[]
         {
             "verbosity",
             "showdescription",
@@ -37,7 +37,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <summary>
         /// Map of Cake short name command line arguments to their respective long name
         /// </summary>
-        public static IDictionary<string, string> KnownCakeCommandLineShortNameArguments = new Dictionary<string, string>
+        public readonly static IDictionary<string, string> KnownCakeCommandLineShortNameArguments = new Dictionary<string, string>
         {
             ["v"] = "verbosity",
             ["s"] = "showdescription",
@@ -50,11 +50,14 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// Parses the command line arguments and splits them up into Cake, Script or Invalid arguments
         /// </summary>
         /// <returns>Returns Tuple of Cake, Script or Invalid arguments</returns>
-        public static (ICollection<string> CakeArgs, ICollection<string> ScriptArgs, ICollection<string> InvalidArgs) ParseCommandLineArgs()
+        public static (ICollection<string> CakeArgs, ICollection<string> ScriptArgs, ICollection<string> InvalidArgs) ParseCommandLineArgs(ICollection<string> args)
         {
-            // first argument is the dll so skip it
-            var args = Environment.GetCommandLineArgs().Skip(1).ToList();
+            if (args == null || !args.Any())
+            {
+                return (CakeArgs: new string[] { }, ScriptArgs: new string[] { }, InvalidArgs: new string[] { });
+            }
 
+            // first argument is the dll so skip it
             ICollection<string> knownArgs = new List<string>();
             ICollection<string> scriptArgs = new List<string>();
             ICollection<string> invalidArgs = new List<string>();
@@ -62,16 +65,16 @@ namespace Cake.Microsoft.Extensions.Configuration
             for (var i = 0; i < args.Count; i++)
             {
                 string argName;
-                var arg = args[i];
+                var arg = args.ElementAt(i);
 
-                if (0 == i && arg.EndsWith(".cake") || arg.EndsWith(".csx"))
+                if (i.Equals(0) && (arg.EndsWith(".cake") || arg.EndsWith(".csx")))
                 {
                     // build script so ignore
                     continue;
                 }
 
                 // break argument up into its parts so we can process it
-                var argParts = Regex.Match(arg, @"^(?<prefix>-|--|/)?(?<argName>\w+)(?:=(?<value>\w+))?");
+                var argParts = Regex.Match(arg, @"^(?<prefix>-|--|/)?(?<argName>\w+)(?:=(?<value>\w+))?$");
 
                 if (!argParts.Success)
                 {
@@ -96,7 +99,7 @@ namespace Cake.Microsoft.Extensions.Configuration
                 {
                     // argument switch is split from it's value so we need to add the next argument as well
                     i++;
-                    list.Add(args[i]);
+                    list.Add(args.ElementAt(i));
                 }
                 else if (isSwitch)
                 {
