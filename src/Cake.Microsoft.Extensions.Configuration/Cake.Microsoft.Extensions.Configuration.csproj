@@ -7,10 +7,11 @@
   <PropertyGroup>
     <PackageId>Cake.Microsoft.Extensions.Configuration</PackageId>
     <Title>Cake.Microsoft.Extensions.Configuration</Title>
-    <Description></Description>
+    <Description>Cake addin for strongly typed configuration</Description>
     <Authors>jonathankuleff</Authors>
-    <Owners>jonathankuleff</Owners>
+    <Owners>jonathankuleff;cake-contrib</Owners>
     <PackageTags>Cake;Build;Addin;Configuration</PackageTags>
+    <PackageIconUrl>https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/JonCubed/cake-microsoft-extensions-configuration</RepositoryUrl>
   </PropertyGroup>
 
