@@ -249,7 +249,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         {
             var args = Environment.GetCommandLineArgs().Skip(1).ToList();
 
-            var (cakeArgs, scriptArgs, invalidArgs) = CommandLineHelper.ParseCommandLineArgs();
+            var (cakeArgs, scriptArgs, invalidArgs) = CommandLineHelper.ParseCommandLineArgs(args);
 
             foreach (var arg in invalidArgs)
             {

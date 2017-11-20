@@ -74,7 +74,7 @@ namespace Cake.Microsoft.Extensions.Configuration
                 }
 
                 // break argument up into its parts so we can process it
-                var argParts = Regex.Match(arg, @"^(?<prefix>-|--|/)?(?<argName>\w+)(?:=(?<value>\w+))?$");
+                var argParts = Regex.Match(arg, @"^(?<prefix>-{1,2}|/)?(?<argName>(?:\w|-|:)+)(?:=""?(?<value>.+)""?)?$");
 
                 if (!argParts.Success)
                 {
@@ -88,7 +88,13 @@ namespace Cake.Microsoft.Extensions.Configuration
                 (argName, arg) = NormaliseArgument(argParts);
 
                 // we need some info about the current argument so we know what to do next
-                var (isSplit, isSwitch) = GetArgumentInfo(argParts, args.Count > i+1 ? args[i + 1] : null);                
+                var (isSplit, isSwitch, isInvalid) = GetArgumentInfo(argParts, args.ElementAtOrDefault(i + 1));
+
+                if (isInvalid)
+                {
+                    invalidArgs.Add(arg);
+                    continue;
+                }
 
                 // pick the correct list to add argument to
                 var list = KnownCakeCommandLineArguments.Contains(argName) ? knownArgs : scriptArgs;
@@ -130,33 +136,40 @@ namespace Cake.Microsoft.Extensions.Configuration
             return (newArgName, arg);
         }
 
-        public static (bool IsSplitArgument, bool IsSwitch) GetArgumentInfo(Match argParts, string nextArgument)
+        public static (bool IsSplitArgument, bool IsSwitch, bool IsInvalid) GetArgumentInfo(Match argParts, string nextArgument)
         {
-            bool hasValue = argParts.Groups["value"].Success ? argParts.Groups["value"].Value != null : false;
+            bool hasPrefix = argParts.Groups["prefix"].Success;
+            bool hasValue = argParts.Groups["value"].Success && argParts.Groups["value"].Value != null;
 
             if (hasValue)
             {
                 // has a value so can't be the others
-                return (IsSplitArgument: false, IsSwitch: false);
+                return (IsSplitArgument: false, IsSwitch: false, IsInvalid: false);
             }
-            
+
+            if (!hasValue && !hasPrefix)
+            {
+                // not a valid argument format
+                return (IsSplitArgument: false, IsSwitch: false, IsInvalid: true);
+            }
+
             if (nextArgument == null)
             {
                 // this is the last argument, so must be a switch
-                return (IsSplitArgument: false, IsSwitch: true);
+                return (IsSplitArgument: false, IsSwitch: true, IsInvalid: false);
             }
-             
+
             // let's figure out if we have a value or argument next
             var nextArgParts = Regex.Match(nextArgument, @"^(?<prefix>-|--|/)?(?<argName>\w+)(?:=(?<value>\w+))?");
 
-            if (!nextArgParts.Success || nextArgParts.Groups["value"].Success)
+            if (!nextArgParts.Success || nextArgParts.Groups["prefix"].Success || nextArgParts.Groups["value"].Success)
             {
                 // next is an argument so current must be a switch
-                return (IsSplitArgument: false, IsSwitch: true);
+                return (IsSplitArgument: false, IsSwitch: true, IsInvalid: false);
             }
 
             // next is not an argument, so current must be a split argument
-            return (IsSplitArgument: true, IsSwitch: false);
+            return (IsSplitArgument: true, IsSwitch: false, IsInvalid: false);
         }
     }
 }
