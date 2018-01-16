@@ -21,8 +21,9 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// <summary>
         /// Gets configuration of <typeparamref name="T"/> using the default configuration builder
         /// that will load configuration in the following order
-        /// 1. Environment Variables (All)
-        /// 2. Command line (without Cake arguments)
+        /// 1. Settings file, build-settings.json (if present)
+        /// 2. Environment Variables (All)
+        /// 3. Command line (without Cake arguments)
         /// </summary>
         /// <typeparam name="T">Type of configuration to return</typeparam>
         /// <param name="context">The cake context</param>
@@ -36,20 +37,22 @@ namespace Cake.Microsoft.Extensions.Configuration
         [CakeMethodAlias]
         public static T GetConfiguration<T>(this ICakeContext context) where T : new()
         {
-            return context.GetConfiguration<T>(localConfiguration: null, commandLineSwitchMappings: null);
+            return context.GetConfiguration<T>(localConfiguration: null, commandLineSwitchMappings: null, settingPath: null);
         }
 
         /// <summary>
         /// Gets configuration of <typeparamref name="T"/> using the default configuration builder
         /// that will load configuration in the following order
-        /// 1. In-Memory Collection
-        /// 2. Environment Variables (All)
-        /// 3. Command line (without Cake arguments)
+        /// 1. In-Memory Collection, (if given)
+        /// 2. Settings file  (if present)
+        /// 3. Environment Variables (All)
+        /// 4. Command line (without Cake arguments)
         /// </summary>
         /// <typeparam name="T">Type of configuration to return</typeparam>
         /// <param name="context">The cake context</param>
         /// <param name="localConfiguration">Dictionary of configuration to initalise configuration with</param>
         /// <param name="commandLineSwitchMappings">Dictionary of command line arguments to replace if present</param>
+        /// <param name="settingPath">Path to settings file to load; if null will default to build-settings.json</param>
         /// <returns>Return configuration of <typeparamref name="T"/></returns>
         /// <example>
         /// <code>
@@ -70,10 +73,10 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// </example>
         [CakeAliasCategory("Get")]
         [CakeMethodAlias]
-        public static T GetConfiguration<T>(this ICakeContext context, IDictionary<string, string> localConfiguration = null, IDictionary<string, string> commandLineSwitchMappings = null) where T : new()
+        public static T GetConfiguration<T>(this ICakeContext context, IDictionary<string, string> localConfiguration = null, IDictionary<string, string> commandLineSwitchMappings = null, string settingPath = null) where T : new()
         {
             var configuration = new T();
-            context.GetConfiguration(configuration, localConfiguration, commandLineSwitchMappings);
+            context.GetConfiguration(configuration, localConfiguration, commandLineSwitchMappings, settingPath);
             return configuration;
         }
 
@@ -81,8 +84,9 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// Binds the configuration to <paramref name="instance"/> using the default configuration builder
         /// that will load configuration in the following order
         /// 1. In-Memory Collection
-        /// 2. Environment Variables (All)
-        /// 3. Command line (without Cake arguments)
+        /// 2. Settings file  (if present)
+        /// 3. Environment Variables (All)
+        /// 4. Command line (without Cake arguments)
         /// </summary>
         /// <typeparam name="T">Type of configuration to return</typeparam>
         /// <param name="context">The cake context</param>
@@ -114,10 +118,10 @@ namespace Cake.Microsoft.Extensions.Configuration
         /// </example>
         [CakeAliasCategory("Get")]
         [CakeMethodAlias]
-        public static void GetConfiguration<T>(this ICakeContext context, T instance, IDictionary<string, string> localConfiguration = null, IDictionary<string, string> commandLineSwitchMappings = null)
+        public static void GetConfiguration<T>(this ICakeContext context, T instance, IDictionary<string, string> localConfiguration = null, IDictionary<string, string> commandLineSwitchMappings = null, string settingsPath = null)
         {
             var mappings = commandLineSwitchMappings?.Concat(CommandLineHelper.KnownCakeCommandLineShortNameArguments.Select(kvp => new KeyValuePair<string, string>($"-{kvp.Key}", $"--{kvp.Value}")));
-            context.GetConfiguration(instance, DefaultLoadConfiguration(localConfiguration, (IDictionary<string, string>)mappings));
+            context.GetConfiguration(instance, ConfigurationBuilderHelper.DefaultLoadConfigurationStrategy(localConfiguration, (IDictionary<string, string>)mappings, settingsPath));
         }
 
         /// <summary>
@@ -249,18 +253,7 @@ namespace Cake.Microsoft.Extensions.Configuration
         {
             var args = Environment.GetCommandLineArgs().Skip(1).ToList();
 
-            var (cakeArgs, scriptArgs, invalidArgs) = CommandLineHelper.ParseCommandLineArgs(args);
-
-            foreach (var arg in invalidArgs)
-            {
-                Console.WriteLine($"{arg} is not in the correct format for Microsoft.Extensions.Configuration.CommandLine and has been ignored.");
-            }
-
-            var builder = new ConfigurationBuilder();
-
-            initialiseAction?.Invoke(builder, scriptArgs.ToArray());
-
-            _configuration = builder.Build();
+            _configuration = ConfigurationBuilderHelper.LoadConfiguration(initialiseAction, args);
         }
 
         /// <summary>
@@ -272,24 +265,6 @@ namespace Cake.Microsoft.Extensions.Configuration
         public static IConfiguration ScriptConfiguration(this ICakeContext context)
         {
             return _configuration;
-        }
-
-        /// <summary>
-        /// Default configuration builder setup
-        /// </summary>
-        /// <param name="localConfiguration">Dictionary of configuration to initalise configuration with</param>
-        /// <param name="commandLineSwitchMappings">Dictionary of command line arguments to replace if present</param>
-        /// <returns>Return action for setting up configuration builder</returns>
-        private static Action<IConfigurationBuilder, string[]> DefaultLoadConfiguration(IDictionary<string, string> localConfiguration = null, IDictionary<string, string> commandLineSwitchMappings = null)
-        {
-            return (builder, args) =>
-            {
-                builder
-                    .AddInMemoryCollection(localConfiguration)
-                    .AddEnvironmentVariables()
-                    .AddCommandLine(args, commandLineSwitchMappings)
-                ;
-            };
         }
     }
 
