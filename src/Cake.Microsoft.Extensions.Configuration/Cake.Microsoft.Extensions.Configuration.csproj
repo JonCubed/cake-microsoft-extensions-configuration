@@ -11,7 +11,7 @@
     <Authors>jonathankuleff</Authors>
     <Owners>jonathankuleff;cake-contrib</Owners>
     <PackageTags>Cake;Build;Addin;Configuration</PackageTags>
-    <PackageIconUrl>https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</PackageIconUrl>
+    <PackageIconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics/png/cake-contrib-medium.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/JonCubed/cake-microsoft-extensions-configuration</RepositoryUrl>
   </PropertyGroup>
 
